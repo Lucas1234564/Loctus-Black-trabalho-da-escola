@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOCTUS BLACK | Premium Streetwear</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffffff;
+            --bg: #050505;
+            --card-bg: #0f0f0f;
+            --accent: #1a1a1a;
+            --success: #2ecc71;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+
+    
+       
+            /* Navegação */
+        nav {
+            position: absolute; /* Alterado de fixed para absolute */
+            top: 0;
+            width: 100%;
+            padding: 25px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+    
+
+        .logo {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover { opacity: 1; }
+
+        /* Estrutura de Páginas */
+        .page { display: none; min-height: 100vh; animation: fadeIn 0.6s ease; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .hero-content { position: relative; text-align: center; z-index: 2; }
+        .hero-content h1 { font-family: 'Syncopate', sans-serif; font-size: clamp(2.5rem, 8vw, 6rem); letter-spacing: -2px; }
+
+        /* Seção de Loja */
+        .shop { padding: 140px 5% 80px; }
+        .section-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border-left: 3px solid #fff;
+            padding-left: 15px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Card de Produto */
+        .product-card {
+            background: var(--card-bg);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #111;
+        }
+
+        .img-container { width: 100%; height: 400px; overflow: hidden; }
+        .product-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); filter: grayscale(100%); }
+        .product-card:hover img { filter: grayscale(0%); transform: scale(1.03); }
+
+        .product-info { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .product-name { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
+        .product-price { font-size: 0.8rem; color: #888; }
+
+        .buy-btn {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: #fff;
+            color: #000;
+            border: none;
+            font-family: 'Syncopate';
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .product-card:hover .buy-btn { bottom: 0; }
+        .buy-btn.added { background: var(--success) !important; color: #fff !important; pointer-events: none; }
+
+        /* Carrinho Lateral */
+        #cart-sidebar {
+            position: fixed;
+            right: -100%;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: #000;
+            z-index: 2000;
+            padding: 40px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #222;
+        }
+
+        #cart-sidebar.active { right: 0; }
+        .close-cart { cursor: pointer; color: #555; font-size: 0.7rem; margin-bottom: 30px; text-transform: uppercase; }
+
+        #cart-items { flex-grow: 1; overflow-y: auto; }
+
+        .cart-item { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
+        .cart-item img { width: 70px; height: 70px; object-fit: cover; }
+        .cart-item-name { font-size: 0.75rem; text-transform: uppercase; display: block; }
+        .cart-item-price { font-size: 0.7rem; color: #666; }
+        .remove-item { color: #ff4444; border: none; background: none; font-size: 0.6rem; cursor: pointer; text-transform: uppercase; margin-top: 5px; }
+
+        /* Rodapé do Carrinho */
+        .cart-footer {
+            border-top: 1px solid #222;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        .total-row { display: flex; justify-content: space-between; font-family: 'Syncopate'; font-size: 0.9rem; margin-bottom: 20px; }
+        .checkout-btn { width: 100%; padding: 15px; background: #fff; border: none; font-family: 'Syncopate'; font-size: 0.7rem; cursor: pointer; }
+
+        footer { padding: 40px 5%; color: #333; font-size: 0.65rem; display: flex; justify-content: space-between; border-top: 1px solid #111; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo" onclick="showPage('home')">LOCTUS</div>
+        <div class="nav-links">
+            <a onclick="showPage('home')">Início</a>
+            <a onclick="showPage('moletons')">Moletons</a>
+            <a onclick="showPage('calças')">Calças</a>
+            <a onclick="showPage('camisetas')">Camisetas</a>
+            <a onclick="toggleCart()">Sacola (<span id="count">0</span>)</a>
+        </div>
+    </nav>
+
+    <div id="page-home" class="page active">
+        <section class="hero">
+            <img src="https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974" class="hero-img">
+            <div class="hero-content">
+                <p style="letter-spacing: 12px; font-size: 0.7rem; color: #aaa; margin-bottom: 15px;">EST. 2024</p>
+                <h1>LOCTUS BLACK</h1>
+            </div>
+        </section>
+    </div>
+
+    <div id="page-catalog" class="page">
+        <main class="shop">
+            <h2 class="section-title" id="catalog-title">Catálogo</h2>
+            <div class="product-grid" id="grid"></div>
+        </main>
+    </div>
+
+    <div id="cart-sidebar">
+        <span class="close-cart" onclick="toggleCart()">[ Fechar Sacola ]</span>
+        <h2 style="font-family: 'Syncopate'; margin-bottom: 25px; font-size: 1.1rem;">SUA SELEÇÃO</h2>
+        
+        <div id="cart-items">
+            </div>
+
+        <div class="cart-footer">
+            <div class="total-row">
+                <span>TOTAL:</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+            <button class="checkout-btn">FINALIZAR COMPRA</button>
+        </div>
+    </div>
+
+    <footer>
+        <div>© 2026 LOCTUS BLACK CO. PRIVACIDADE & TERMOS</div>
+        <div>WHATSAPP / INSTAGRAM / TIKTOK</div>
+    </footer>
+
+    <script>
+     const products = [
+            // MOLETONS - Oversized e Heavyweight
+            { id: 1, name: "Moletom Nocturnal", price: 124.99, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80", category: "moletons" },
+            { id: 2, name: "Moletom Essencial Cinza", price: 180.99, img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80", category: "moletons" },
+            { id: 3, name: "Moletom Obsidian", price: 230.98, img: "https://static.netshoes.com.br/produtos/moletom-masculino-liso-abrigo-blusa-moleton-casaco-com-capuz-e-ziper/06/HK1-0095-006/HK1-0095-006_zoom1.jpg?ts=1688143876", category: "moletons" },
+            
+            // CALÇAS - Cargo e Baggy Masculina
+            { id: 4, name: "Calça Cargo Void", price: 229.99, img: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80", category: "calças" },
+            { id: 5, name: "Jogger Tech Preta", price: 249.75, img: "https://tse4.mm.bing.net/th/id/OIP.nXKgRt5-xbE9SxYe1vKX-gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", category: "calças" },
+            { id: 6, name: "Calça Combat V2", price: 320.99, img: "https://images.tcdn.com.br/img/img_prod/1249807/calca_jeans_masculina_perna_reta_com_lavagem_clara_dialogo_jeans_351_1_b2c0c999d5f85586e587370c35a57d58.jpg", category: "calças" },
+
+            // CAMISETAS - Box Fit / Drop Shoulder
+            { id: 7, name: "Camiseta Shadow", price: 94.99, img: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80", category: "camisetas" },
+            { id: 8, name: "Minimal Tee Branca", price: 89.99, img: "https://tse1.mm.bing.net/th/id/OIP.qpT0tnM8jg3afDtFWLGSCQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", category: "camisetas" },
+            { id: 9, name: "Camiseta Cyber Print", price: 79.99, img: "https://img.freepik.com/fotos-premium/essential-black-a-camiseta-branca-perfeita_947865-70159.jpg", category: "camisetas" }
+        ];
+        
+    
+    
+
+        let cart = [];
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            if (pageId === 'home') {
+                document.getElementById('page-home').classList.add('active');
+            } else {
+                const catalog = document.getElementById('page-catalog');
+                catalog.classList.add('active');
+                document.getElementById('catalog-title').innerText = pageId;
+                const filtered = products.filter(p => p.category === pageId);
+                renderGrid(filtered);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderGrid(list) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = "";
+            list.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <div class="img-container"><img src="${p.img}"></div>
+                        <div class="product-info">
+                            <span class="product-name">${p.name}</span>
+                            <span class="product-price">R$ ${p.price}</span>
+                        </div>
+                        <button class="buy-btn" onclick="addToBag(${p.id})">ADICIONAR</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addToBag(id) {
+            const btn = event.target;
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCartUI();
+
+            btn.classList.add('added');
+            btn.innerText = "ADICIONADO!";
+            setTimeout(() => {
+                btn.classList.remove('added');
+                btn.innerText = "ADICIONAR";
+            }, 1000);
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const totalDisplay = document.getElementById('cart-total');
+            document.getElementById('count').innerText = cart.length;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color: #222; font-size: 0.7rem;">Sua sacola está vazia.</p>';
+                totalDisplay.innerText = "R$ 0,00";
+                return;
+            }
+
+            container.innerHTML = "";
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.img}">
+                        <div class="cart-item-info">
+                            <span class="cart-item-name">${item.name}</span>
+                            <span class="cart-item-price">R$ ${item.price}</span>
+                            <button class="remove-item" onclick="removeItem(${index})">Remover</button>
+                        </div>
+                    </div>
+                `;
+            });
+            totalDisplay.innerText = `R$ ${total.toFixed(2)}`;
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
